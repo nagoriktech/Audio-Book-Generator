@@ -1,0 +1,436 @@
+{
+  "name": "AudioBook Generator",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        112,
+        752
+      ],
+      "id": "489ff792-e628-48aa-959a-b3db76311838",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f7547031-a70f-418a-bff9-3c935b29b12b",
+              "name": "text",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "008cfd6a-4cb6-4447-8f78-273577449ddc",
+              "name": "voice_id",
+              "value": "Nmp3NNe84BzitCkA5brZ",
+              "type": "string"
+            },
+            {
+              "id": "715d3e8b-9d08-4338-aee1-b162b6612159",
+              "name": "chap_number",
+              "value": "ALL",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1104,
+        656
+      ],
+      "id": "f1cb756e-373f-4843-a912-ecb2fd7f7e2e",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "18ogksQ_mWCgX2CacuS8dDn8Qz46zmzCgtd0XDLTxz7s",
+          "mode": "list",
+          "cachedResultName": "Ebook Content",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18ogksQ_mWCgX2CacuS8dDn8Qz46zmzCgtd0XDLTxz7s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 860194980,
+          "mode": "list",
+          "cachedResultName": "example",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18ogksQ_mWCgX2CacuS8dDn8Qz46zmzCgtd0XDLTxz7s/edit#gid=860194980"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        432,
+        752
+      ],
+      "id": "fe9c91fb-ca00-440b-a613-0a8c59703567",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3MJE8MvoAP44Rjl9",
+          "name": "Nagorik Google Sheet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cac54bc0-5089-4ca0-b6ea-8e4cb0f600c6",
+              "leftValue": "Combined",
+              "rightValue": "={{ $('User Preference').item.json.Preference }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        592,
+        752
+      ],
+      "id": "467dbf49-bead-4674-a71e-edc8db88e09b",
+      "name": "Combined/Single"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "Chapter Content"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        784,
+        656
+      ],
+      "id": "26089165-cda8-4113-81e0-ce080373cd34",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f7547031-a70f-418a-bff9-3c935b29b12b",
+              "name": "text",
+              "value": "={{ $json['Chapter Content'] }}",
+              "type": "string"
+            },
+            {
+              "id": "008cfd6a-4cb6-4447-8f78-273577449ddc",
+              "name": "voice_id",
+              "value": "Nmp3NNe84BzitCkA5brZ",
+              "type": "string"
+            },
+            {
+              "id": "715d3e8b-9d08-4338-aee1-b162b6612159",
+              "name": "chap_number",
+              "value": "={{ $json.row_number - 1}}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        944,
+        832
+      ],
+      "id": "64d7c0dd-ed3e-46d3-b7cf-20c5113dae19",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=Chapter_{{ $json.chap_number }}.mp3",
+        "name": "=Chapter_{{ $json.chap_number }}.mp3",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1i3sGdmDLLeIgwfq1uORhqu3lc3lQvhZx",
+          "mode": "list",
+          "cachedResultName": "Example",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1i3sGdmDLLeIgwfq1uORhqu3lc3lQvhZx"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1600,
+        832
+      ],
+      "id": "1e470efb-3d0e-4ce9-b5d7-f02d80af7867",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "pbU4sXY3pglN8D08",
+          "name": "Tabeeb Nagorik GDrive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9d37e279-420a-481e-b0c1-1e06c057793d",
+              "name": "Preference",
+              "value": "Combined",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        752
+      ],
+      "id": "8a26aa2b-f411-4953-824f-1d781843c9f9",
+      "name": "User Preference"
+    },
+    {
+      "parameters": {
+        "jsCode": "var x = $input.first().json['Chapter Content'];\n\n// Ensure it's an array\nif (!Array.isArray(x)) {\n  throw new Error(\"Input is not an array of strings\");\n}\n\n// Merge strings with full stop\nconst mergedString = x.join('. ');\n\n// Return final output\nreturn {\n  output: mergedString\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        944,
+        656
+      ],
+      "id": "e11ca4d4-c1aa-45df-b2f4-566e57f3600e",
+      "name": "Chapter Merger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.elevenlabs.io/v1/text-to-speech/{{ $json.voice_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "audio/mpeg"
+            },
+            {
+              "name": "xi-api-key",
+              "value": "sk_7274052b921e29a3787c5cc0780cb488dbaca9b613f26452"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"{{ $json.text }}\",\n  \"model_id\": \"eleven_multilingual_v2\",\n  \"voice_settings\": {\n    \"stability\": 0.45,\n    \"similarity_boost\": 0.5,\n    \"speed\": 0.95\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "=Chapter_{{ $json.chap_number }}.mp3"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1440,
+        832
+      ],
+      "id": "9bfffe90-86aa-4145-bdbd-ba45be490e39",
+      "name": "ElevenLabs_TTS"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1280,
+        752
+      ],
+      "id": "5dd0d899-b3e8-4bc2-a4b3-484c4fda0dfe",
+      "name": "Loop"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "User Preference",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Combined/Single",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combined/Single": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Chapter Merger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "User Preference": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chapter Merger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ElevenLabs_TTS": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop": {
+      "main": [
+        [],
+        [
+          {
+            "node": "ElevenLabs_TTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "48323e5a-d31b-4c63-ac4b-16299468cd63",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5ca157bf036415a321c9d29eeb986017053989bb83b5b61701e90fe3987ac8b7"
+  },
+  "id": "rh7761g7PLoPntpE",
+  "tags": []
+}
