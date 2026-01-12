@@ -1,4 +1,8 @@
-![AI-Powered Ebook Generator – Sequence Diagram](atmlab-white@4x.webp)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="atmlab-white@4x.webp">
+  <source media="(prefers-color-scheme: light)" srcset="atmlab-black@4x.webp">
+  <img alt="AI-Powered Ebook Generator – Sequence Diagram" src="atmlab-dark@4x.webp">
+</picture>
 
 #
 
