@@ -132,8 +132,6 @@ Insert a webhook or notification node after the Upload file node that sends you 
 
 ---
 
----
-
 ## License
 
 This project is licensed under the terms specified in the [LICENSE](LICENSE) file.
