@@ -129,3 +129,13 @@ Extend the workflow by adding nodes that check for existing audio files in Googl
 
 **Add Quality Control:**  
 Insert a webhook or notification node after the Upload file node that sends you a Slack message or email when audiobook generation completes, including links to the generated files for immediate review.
+
+---
+
+---
+
+## License
+
+This project is licensed under the terms specified in the [LICENSE](LICENSE) file.
+
+For more information about usage rights and restrictions, please refer to the LICENSE file in the repository root.
